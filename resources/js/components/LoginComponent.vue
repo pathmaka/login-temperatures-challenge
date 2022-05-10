@@ -34,7 +34,7 @@
                temperature:{
                    chicago: '200',
                    colombo: '60',
-                   user_id: 0,
+                   user_id: '0',
                },
                form: {
                     email: '',
@@ -62,9 +62,11 @@
             },
 
             saveTemp(){
+                
                 let userData = JSON.parse(localStorage.getItem('user'));
                 let access_token = userData.access_token;
-                this.user_id = userData.id;
+                this.temperature.user_id = userData.id;
+                
                 const instance = axios.create({
                                     headers: {'Authorization': 'Bearer ' + access_token}
                                  });

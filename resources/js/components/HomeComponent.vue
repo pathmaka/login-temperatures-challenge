@@ -21,9 +21,9 @@
                         <tr v-for="cust in viewData" >
                             <td>{{ cust.updated_at }}</td>
                             <td>{{ cust.chicago }}</td>
-                            <td>{{ cust.chicago }}</td>
+                            <td>{{ parseInt(cust.chicago) - 32 }}</td>
                             <td>{{ cust.colombo }}</td>
-                            <td>{{ cust.colombo }}</td>
+                            <td>{{ parseInt(cust.colombo) - 32 }}</td>
                             
                         </tr>
                         

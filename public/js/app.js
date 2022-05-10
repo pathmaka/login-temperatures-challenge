@@ -28443,11 +28443,11 @@ var render = function () {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(cust.chicago))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(cust.chicago))]),
+                _c("td", [_vm._v(_vm._s(parseInt(cust.chicago) - 32))]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(cust.colombo))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(cust.colombo))]),
+                _c("td", [_vm._v(_vm._s(parseInt(cust.colombo) - 32))]),
               ])
             }),
             0

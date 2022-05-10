@@ -5314,8 +5314,58 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  mounted: function mounted() {//console.log('Component mounted.');
+  data: function data() {
+    return {
+      viewData: null,
+      getTemps: {
+        user_id: 0
+      }
+    };
+  },
+  methods: {
+    init: function init() {
+      var _this = this;
+
+      var userData = JSON.parse(localStorage.getItem('user'));
+      var access_token = userData.access_token;
+      this.getTemps.user_id = userData.id;
+      var instance = axios.create({
+        headers: {
+          'Authorization': 'Bearer ' + access_token
+        }
+      });
+      instance.post('/api/temperatures', this.getTemps).then(function (response) {
+        _this.viewData = response.data;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.init();
   }
 });
 
@@ -5358,9 +5408,72 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+var apiEndPoint = '/api/login';
+var saveEndPoint = '/api/savetemp';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      temperature: {
+        chicago: '200',
+        colombo: '60',
+        user_id: 0
+      },
+      form: {
+        email: '',
+        password: ''
+      }
+    };
+  },
+  methods: {
+    submitForm: function submitForm() {
+      var _this2 = this;
+
+      var _this = this;
+
+      axios.post(apiEndPoint, this.form).then(function (response) {
+        localStorage.removeItem('user');
+        console.log("Succesfully login!");
+        localStorage.setItem('user', JSON.stringify(response.data));
+
+        _this2.saveTemp();
+
+        _this.$router.push('/home');
+      })["catch"](function (error) {
+        console.log("Error login");
+        localStorage.removeItem('user');
+      });
+    },
+    saveTemp: function saveTemp() {
+      var userData = JSON.parse(localStorage.getItem('user'));
+      var access_token = userData.access_token;
+      this.user_id = userData.id;
+      var instance = axios.create({
+        headers: {
+          'Authorization': 'Bearer ' + access_token
+        }
+      });
+      instance.post(saveEndPoint, this.temperature).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log("Error");
+      });
+    },
+    //This is getting CORS issue. Need to move to the API middleware.
+    init: function init() {
+      var chikagoPath = "https://api.openweathermap.org/data/2.5/onecall?lat=33.44&lon=-94.04&appid=8dc9ba99c4e5fe28f4dc20edbc1848c0"; //axios.get(chikagoPath).then(response => {
+      //this.temperature.chikago = response.data.temp;
+      //console.log(this.temperature.chikago);
+      //});
+
+      var colomboPath = "https://api.openweathermap.org/data/2.5/onecall?lat=6.9271&lon=79.8612&appid=8dc9ba99c4e5fe28f4dc20edbc1848c0"; //axios.get(colomboPath).then(response => {
+      //this.temperature.colombo = response.data.temp;
+      //console.log(this.temperature.colombo);
+      //});
+      //this.saveTemp();
+    }
+  },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    this.init();
   }
 });
 
@@ -28306,24 +28419,60 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row justify-content-center" }, [
+      _c("div", { staticClass: "col-6" }, [
+        _c("br"),
+        _c("h1", [_vm._v("Login Temperatures")]),
+        _vm._v(" "),
+        _c("hr"),
+        _c("br"),
+        _vm._v(" "),
+        _c("h2", [_vm._v("Home")]),
+        _c("br"),
+        _vm._v(" "),
+        _c("table", { staticClass: "table" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c(
+            "tbody",
+            { attrs: { id: "mytable" } },
+            _vm._l(_vm.viewData, function (cust) {
+              return _c("tr", [
+                _c("td", [_vm._v(_vm._s(cust.updated_at))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(cust.chicago))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(cust.chicago))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(cust.colombo))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(cust.colombo))]),
+              ])
+            }),
+            0
+          ),
+        ]),
+      ]),
+    ]),
+  ])
 }
 var staticRenderFns = [
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "col-6" }, [
-          _c("br"),
-          _c("h1", [_vm._v("Login Temperatures")]),
-          _vm._v(" "),
-          _c("hr"),
-          _c("br"),
-          _vm._v(" "),
-          _c("h2", [_vm._v("Home")]),
-        ]),
+    return _c("thead", { staticClass: "thead-dark" }, [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Time")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Chicago F")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Chicago C")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Colombo F")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Colombo C")]),
       ]),
     ])
   },
@@ -28364,19 +28513,72 @@ var render = function () {
         _c(
           "form",
           {
+            attrs: { id: "loginForm" },
             on: {
               submit: function ($event) {
                 $event.preventDefault()
-                return _vm.submit.apply(null, arguments)
+                return _vm.submitForm.apply(null, arguments)
               },
             },
           },
           [
-            _vm._m(0),
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.email,
+                    expression: "form.email",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "email",
+                  id: "email",
+                  placeholder: "Enter email",
+                },
+                domProps: { value: _vm.form.email },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "email", $event.target.value)
+                  },
+                },
+              }),
+            ]),
             _vm._v(" "),
             _c("br"),
             _vm._v(" "),
-            _vm._m(1),
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.form.password,
+                    expression: "form.password",
+                  },
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "password",
+                  id: "password",
+                  placeholder: "Password",
+                },
+                domProps: { value: _vm.form.password },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.form, "password", $event.target.value)
+                  },
+                },
+              }),
+            ]),
             _vm._v(" "),
             _c("br"),
             _vm._v(" "),
@@ -28391,12 +28593,6 @@ var render = function () {
               { staticClass: "btn btn-link", attrs: { to: "/register" } },
               [_vm._v("Register")]
             ),
-            _vm._v(" "),
-            _c(
-              "router-link",
-              { staticClass: "btn btn-link", attrs: { to: "/home" } },
-              [_vm._v("Home")]
-            ),
           ],
           1
         ),
@@ -28404,38 +28600,7 @@ var render = function () {
     ]),
   ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "email",
-          id: "exampleInputEmail1",
-          placeholder: "Enter email",
-        },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: {
-          type: "password",
-          id: "exampleInputPassword1",
-          placeholder: "Password",
-        },
-      }),
-    ])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

@@ -16,10 +16,15 @@ class CreateTemperaturesTable extends Migration
         Schema::create('temperatures', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->string('fahrenheit'); 
-            $table->string('celsius');
+            $table->string('chicago'); 
+            $table->string('colombo');
             $table->timestamps();
         });
+
+        // Schema::table('temperatures', function (Blueprint $table) {
+        //     $table->renameColumn('fahrenheit', 'chicago');
+        //     $table->renameColumn('celsius', 'colombo');
+        // });
     }
 
     /**

@@ -16,9 +16,14 @@ Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login'])
 
 //Protecting Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
+
     Route::get('/profile', function(Request $request) {
         return auth()->user();
     });
+
+    Route::get('/temperatures', [App\Http\Controllers\API\AuthController::class, 'temperatures']);
+
+    Route::post('/savetemp', [App\Http\Controllers\API\AuthController::class, 'saveTemperature']);
 
     // API route for logout user
     Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout']);

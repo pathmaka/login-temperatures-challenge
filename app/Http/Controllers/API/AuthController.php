@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Auth;
 use Validator;
 use App\Models\User;
+use App\Models\Temperatures;
 
 class AuthController extends Controller
 {
@@ -49,6 +50,28 @@ class AuthController extends Controller
 
         return response()
             ->json(['id' => $user->id, 'message' => 'Hi '.$user->name.', welcome!','access_token' => $token, 'token_type' => 'Bearer', ]);
+    }
+
+    public function temperatures(Request $request)
+    {
+        return Temperatures::orderBy('timestamps', 'asc')->get();  
+    }
+
+    public function saveTemperature(Request $request)
+    {
+        $this->validate($request, [ 
+            'user_id' => 'required',
+            'fahrenheit' => 'required',
+            'celsius' => 'required'
+        ]);
+  
+        $temperature = new Temperatures;
+        $temperature->user_id = $request->user_id; 
+        $temperature->fahrenheit = $request->fahrenheit;  
+        $temperature->celsius = $request->celsius;  
+        
+        $temperature->save(); 
+        return true; 
     }
 
     // method for user logout and delete token

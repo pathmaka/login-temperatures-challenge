@@ -9,7 +9,7 @@ The task is to implement a small webapp that will store the current temperature 
     Vue.js
     Open Weather API / https://openweathermap.org/api/one-call-api
     
-    (Vue / Laravel mix build)
+    (this is a small webapp then I have used Vue/Laravel mix build) 
     
 ## API
 Rest API authentication: Sanctum

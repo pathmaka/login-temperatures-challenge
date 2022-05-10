@@ -21,8 +21,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         return auth()->user();
     });
 
+    // API route for get saved temperatures by user
     Route::post('/temperatures', [App\Http\Controllers\API\AuthController::class, 'temperatures']);
 
+    // API route for save temperature by user
     Route::post('/savetemp', [App\Http\Controllers\API\AuthController::class, 'saveTemperature']);
 
     // API route for logout user

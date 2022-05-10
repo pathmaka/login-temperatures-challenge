@@ -65,14 +65,14 @@ class AuthController extends Controller
     {
         $this->validate($request, [ 
             'user_id' => 'required',
-            'fahrenheit' => 'required',
-            'celsius' => 'required'
+            'chicago' => 'required',
+            'colombo' => 'required'
         ]);
   
         $temperature = new Temperatures;
         $temperature->user_id = $request->user_id; 
-        $temperature->fahrenheit = $request->fahrenheit;  
-        $temperature->celsius = $request->celsius;  
+        $temperature->chicago = $request->chicago;  
+        $temperature->colombo = $request->colombo;  
         
         $temperature->save(); 
         return true; 

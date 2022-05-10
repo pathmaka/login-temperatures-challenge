@@ -7,9 +7,16 @@
 require('./bootstrap');
 
 window.Vue = require('vue').default;
+import Router from './routes.js';
+
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('login', require('./components/LoginComponent.vue').default);
+Vue.component('home', require('./components/HomeComponent.vue').default);
+Vue.component('register', require('./components/RegisterComponent.vue').default);
+
 
 const app = new Vue({
     el: '#app',
+    router:Router
 }); 

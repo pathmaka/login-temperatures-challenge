@@ -5338,29 +5338,59 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+var apiEndPointLogout = '/api/logout';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       viewData: null,
       getTemps: {
-        user_id: 0
+        user_id: ""
       }
     };
   },
   methods: {
     init: function init() {
+      var _this2 = this;
+
+      if (localStorage.getItem('user')) {
+        var userData = JSON.parse(localStorage.getItem('user'));
+        var access_token = userData.access_token;
+        this.getTemps.user_id = userData.id;
+        var instance = axios.create({
+          headers: {
+            'Authorization': 'Bearer ' + access_token
+          }
+        });
+        instance.post('/api/temperatures', this.getTemps).then(function (response) {
+          _this2.viewData = response.data;
+        });
+      } else {
+        this.$router.push('/login');
+      }
+    },
+    submitFormLogout: function submitFormLogout() {
       var _this = this;
 
       var userData = JSON.parse(localStorage.getItem('user'));
       var access_token = userData.access_token;
-      this.getTemps.user_id = userData.id;
-      var instance = axios.create({
+      var instanceLogout = axios.create({
         headers: {
           'Authorization': 'Bearer ' + access_token
         }
       });
-      instance.post('/api/temperatures', this.getTemps).then(function (response) {
-        _this.viewData = response.data;
+      instanceLogout.post(apiEndPointLogout).then(function (response) {
+        localStorage.removeItem('user');
+
+        _this.$router.push('/logout');
       });
     }
   },
@@ -5416,7 +5446,7 @@ var saveEndPoint = '/api/savetemp';
       temperature: {
         chicago: '200',
         colombo: '60',
-        user_id: 0
+        user_id: '0'
       },
       form: {
         email: '',
@@ -5446,7 +5476,7 @@ var saveEndPoint = '/api/savetemp';
     saveTemp: function saveTemp() {
       var userData = JSON.parse(localStorage.getItem('user'));
       var access_token = userData.access_token;
-      this.user_id = userData.id;
+      this.temperature.user_id = userData.id;
       var instance = axios.create({
         headers: {
           'Authorization': 'Bearer ' + access_token
@@ -28428,11 +28458,37 @@ var render = function () {
         _c("hr"),
         _c("br"),
         _vm._v(" "),
-        _c("h2", [_vm._v("Home")]),
-        _c("br"),
+        _c("div", { staticClass: "row" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-6" }, [
+            _c(
+              "form",
+              {
+                attrs: { id: "loginForm" },
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.submitFormLogout.apply(null, arguments)
+                  },
+                },
+              },
+              [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-warning float-right",
+                    attrs: { type: "submit" },
+                  },
+                  [_vm._v("Logout")]
+                ),
+              ]
+            ),
+          ]),
+        ]),
         _vm._v(" "),
         _c("table", { staticClass: "table" }, [
-          _vm._m(0),
+          _vm._m(1),
           _vm._v(" "),
           _c(
             "tbody",
@@ -28458,6 +28514,12 @@ var render = function () {
   ])
 }
 var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-6" }, [_c("h2", [_vm._v("Home")])])
+  },
   function () {
     var _vm = this
     var _h = _vm.$createElement

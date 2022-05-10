@@ -4,7 +4,16 @@
             <div class="col-6">
                 <br><h1>Login Temperatures</h1>
                 <hr><br>
-                <h2>Home</h2><br>
+                <div class="row">
+                    <div class="col-6">
+                        <h2>Home</h2>
+                    </div>
+                    <div class="col-6">
+                        <form id="loginForm" v-on:submit.prevent="submitFormLogout">
+                            <button type="submit" class="btn btn-warning float-right">Logout</button>
+                        </form>
+                    </div>
+                </div>
 
                 <table class="table">
                     <thead class="thead-dark">
@@ -36,13 +45,14 @@
 </template>
 
 <script>
+    let apiEndPointLogout = '/api/logout';
     export default {
 
         data() {
             return {
                 viewData: null,
                 getTemps:{
-                    user_id: 0,
+                    user_id: "",
                 },
                 
             }
@@ -50,15 +60,33 @@
 
         methods: {
             init(){
+                if(localStorage.getItem('user')){
+                    let userData = JSON.parse(localStorage.getItem('user'));
+                    let access_token = userData.access_token;
+                    this.getTemps.user_id = userData.id;
+                    const instance = axios.create({
+                                        headers: {'Authorization': 'Bearer ' + access_token}
+                                    });
+                    instance.post('/api/temperatures', this.getTemps).then(response => {
+                        this.viewData = response.data;
+                    });
+                }else{
+                    this.$router.push('/login');
+                }
+                
+            },
+
+            submitFormLogout() {
+                var _this = this;
                 let userData = JSON.parse(localStorage.getItem('user'));
                 let access_token = userData.access_token;
-                this.getTemps.user_id = userData.id;
-                const instance = axios.create({
+                const instanceLogout = axios.create({
                                     headers: {'Authorization': 'Bearer ' + access_token}
-                                 });
-                instance.post('/api/temperatures', this.getTemps).then(response => {
-                    this.viewData = response.data;
-                })
+                                });
+                instanceLogout.post(apiEndPointLogout).then(response => {
+                    localStorage.removeItem('user');
+                    _this.$router.push('/logout');
+                });
             },
         },
 

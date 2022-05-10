@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         return auth()->user();
     });
 
-    Route::get('/temperatures', [App\Http\Controllers\API\AuthController::class, 'temperatures']);
+    Route::post('/temperatures', [App\Http\Controllers\API\AuthController::class, 'temperatures']);
 
     Route::post('/savetemp', [App\Http\Controllers\API\AuthController::class, 'saveTemperature']);
 

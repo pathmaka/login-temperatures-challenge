@@ -54,7 +54,11 @@ class AuthController extends Controller
 
     public function temperatures(Request $request)
     {
-        return Temperatures::orderBy('timestamps', 'asc')->get();  
+        $this->validate($request, [ 
+            'user_id' => 'required'
+        ]);
+        $uId = strval($request->user_id);
+        return Temperatures::where('user_id', $uId)->orderBy('timestamps', 'asc')->get();  
     }
 
     public function saveTemperature(Request $request)
